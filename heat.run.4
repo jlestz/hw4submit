@@ -1,0 +1,22 @@
+#!/bin/bash 
+#SBATCH --nodes=1
+#SBATCH --ntasks-per-node=4
+#SBATCH --time=00:30:00
+#SBATCH --job-name=heat.4
+#SBATCH --output=heat.4.out
+#SBATCH --error=heat.4.err
+
+#SBATCH --mail-type=all 
+#SBATCH --mail-user=jlestz@princeton.edu
+
+module load openmpi 
+
+basdir=~/apc524/hw4
+cd $basdir/output 
+nprocs=4; 
+
+for nx in 128 256 512 
+do 
+    $basdir/heat_omp $nx $nprocs
+    srun $basdir/heat_mpi $nx
+done 
